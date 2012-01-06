@@ -24,7 +24,7 @@ module ActiveMerchant #:nodoc:
         @total_price = Package.cents_from(options[:total_price])
         @currency = options[:currency]
         @delivery_range = options[:delivery_range] ? options[:delivery_range].map { |date| date_for(date) }.compact : []
-        @delivery_date = @delivery_range.last
+        @delivery_date = options[:delivery_date] ? options[:delivery_date] : @delivery_range.last
       end
 
       def total_price
