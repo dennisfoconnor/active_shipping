@@ -71,8 +71,14 @@ class UPSTest < Test::Unit::TestCase
                    "UPS Next Day Air Early A.M.",
                    "UPS Next Day Air"], response.rates.map(&:service_name)
     assert_equal [992, 2191, 3007, 5509, 9401, 6124], response.rates.map(&:price)
-    assert_equal [nil, 3, 2, 1, 1, 1].map{|days| days ? days.days.from_now.strftime("%Y-%m-%d"): days}, 
-      response.rates.map{|rate| rate.delivery_date ? rate.delivery_date.strftime("%Y-%m-%d") : rate.delivery_date}
+    
+    date_test = [nil, 3, 2, 1, 1, 1].map  do |days| 
+      if days
+       DateTime.strptime(days.days.from_now.strftime("%Y-%m-%d"), "%Y-%m-%d") 
+      end
+    end
+    
+    assert_equal date_test, response.rates.map(&:delivery_date)
   end
   
   def test_maximum_weight
